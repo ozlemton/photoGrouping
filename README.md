@@ -85,22 +85,16 @@ PhotoGroupingApp/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/ozlemton/PhotoGroupingApp.git
-   cd PhotoGroupingApp
+   git clone https://github.com/ozlemton/photoGrouping.git
+   cd photoGrouping
    ```
 
 2. **Open in Xcode**
-   ```bash
-   open PhotoGroupingApp.xcodeproj
-   ```
 
 3. **Build and Run**
-   - Select your target device/simulator
+   - Select your target real device
    - Press `Cmd + R` to build and run
 
-### Configuration
-
-The app will automatically request photo library access on first launch. Grant permission to enable photo scanning functionality.
 
 ## 📱 Usage
 
@@ -139,17 +133,4 @@ The app will automatically request photo library access on first launch. Grant p
 - Provides deterministic grouping logic
 - Handles "Other" category for unmatched photos
 
-
-
-## 🐛 Known Issues
-
-- None currently identified
-
-## 🚧 Future Enhancements
-
-- [ ] Custom grouping algorithms
-- [ ] Export functionality for grouped photos
-- [ ] Advanced filtering options
-- [ ] Cloud sync capabilities
-- [ ] Batch operations on groups
 
