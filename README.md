@@ -1,8 +1,8 @@
-# PhotoGroupingApp 📸
+# PhotoGrouping 📸
 
 ## 🎯 Overview
 
-PhotoGroupingApp analyzes photos in the user's library, generates deterministic values for each image, and groups them into 20 distinct categories based on predefined ranges. The app provides a seamless user experience with progressive scanning, real-time updates, and efficient memory management.
+PhotoGrouping analyzes photos in the user's library, generates deterministic values for each image, and groups them into 20 distinct categories based on predefined ranges. The app provides a seamless user experience with progressive scanning, real-time updates, and efficient memory management.
 
 ## ✨ Features
 
