@@ -43,6 +43,8 @@ struct GroupDetailView: View {
     }
 }
 
+
+
 struct PhotoThumbnailView: View {
     let asset: PHAsset
     @State private var image: UIImage? = nil
@@ -88,34 +90,59 @@ struct PhotoThumbnailView: View {
     }
     
     private func fetchThumbnail() {
-        if let cachedImage = ImageCache.shared.cachedImage(for: asset, size: thumbnailSize) {
+        // Cache varsa kullan
+        if let cached = ImageCache.shared.cachedImage(for: asset, size: thumbnailSize) {
             DispatchQueue.main.async {
-                self.image = cachedImage
+                self.image = cached
                 self.isLoading = false
             }
             return
         }
         
         let manager = PHImageManager.default()
+        
+        // Önce hızlı thumbnail dene
         let options = PHImageRequestOptions()
         options.deliveryMode = .fastFormat
-        options.isSynchronous = false
         options.isNetworkAccessAllowed = true
         options.resizeMode = .fast
-
+        options.isSynchronous = false
+        
         manager.requestImage(for: asset,
                              targetSize: thumbnailSize,
                              contentMode: .aspectFill,
-                             options: options) { image, info in
+                             options: options) { thumbImage, info in
+            if let thumbImage = thumbImage {
+                DispatchQueue.main.async {
+                    self.image = thumbImage
+                    ImageCache.shared.setCachedImage(thumbImage, for: self.asset, size: self.thumbnailSize)
+                    self.isLoading = false
+                }
+            } else {
+                // Thumbnail yoksa fallback olarak full image iste
+                self.fetchFullImage()
+            }
+        }
+    }
+    
+    private func fetchFullImage() {
+        let manager = PHImageManager.default()
+        let options = PHImageRequestOptions()
+        options.isSynchronous = false
+        options.isNetworkAccessAllowed = true
+        options.deliveryMode = .highQualityFormat
+        
+        manager.requestImageDataAndOrientation(for: asset, options: options) { data, _, _, _ in
             DispatchQueue.main.async {
-                self.isLoading = false
-                if let image = image {
-                    self.image = image
-                    ImageCache.shared.setCachedImage(image, for: self.asset, size: self.thumbnailSize)
+                if let data = data, let uiImage = UIImage(data: data) {
+                    self.image = uiImage
+                    ImageCache.shared.setCachedImage(uiImage, for: self.asset, size: self.thumbnailSize)
                 } else {
                     self.hasError = true
                 }
+                self.isLoading = false
             }
         }
     }
 }
+
